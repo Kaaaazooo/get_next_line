@@ -32,6 +32,26 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
+char	*ft_strdup(const char *s1)
+{
+	size_t		i;
+	char		*s2;
+
+	i = 0;
+	while (s1[i])
+		i++;
+	if (!(s2 = malloc(sizeof(*s2) * (i + 1))))
+		return (0);
+	i = 0;
+	while (s1[i])
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = 0;
+	return (s2);
+}
+
 char	*ft_strndup(const char *s1, size_t n)
 {
 	unsigned int	i;
@@ -75,6 +95,5 @@ char	*ft_strnjoin(char *s1, char *s2, int len1, int len2)
 		return (0);
 	ft_memcpy(tmp, s1, len1);
 	ft_memcpy(tmp + len1, s2, len2);
-	tmp[len1 + len2] = 0;
 	return (tmp);
 }

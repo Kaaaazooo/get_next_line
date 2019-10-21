@@ -15,25 +15,54 @@
 #include <stdio.h>
 #include <string.h>
 
+int		get_line(char **str, char **line, int fd)
+{
+	unsigned int	i;
+
+//	printf("%s", str[fd]);
+	i = 0;
+	if (!str[fd])
+	{
+		*line = 0;
+		return (0);
+	}
+	while (str[fd][i] && str[fd][i] != '\n')
+	{
+		//printf("str[%d] = %c\n", i , str[fd][i]);
+		i++;
+	}
+	if (!(*line = ft_strndup(str[fd], i)))
+		return (-1);
+	str[fd] = &str[fd][i + 1];
+	return (0);
+}
+
 int		get_next_line(int fd, char **line)
 {
 	int				ret;
-	static int		size;
+	int				size;
 	char			buf[BUF_SIZE];
-	char			*str;
-	int				end;
+	static char		*str[125];
+	int				check;
 
 	size = 0;
-	while ((ret = read(fd, buf, BUF_SIZE)))
+
+	if (fd == -1)
+		return (-1);
+	if (!str[fd])
 	{
-		end = find_newline(buf, ret);
-		str = ft_strnjoin(str, buf, size, ret);
-		size += ret;
-		if (end != ret)
-			break ;
+		while ((ret = read(fd, buf, BUF_SIZE)))
+		{
+			if (!(str[fd] = ft_strnjoin(str[fd], buf, size, ret)))
+				return (-1);
+			size += ret;
+		}
 	}
-	*line = str;
-	return ((str) ? 1 : 0);
+	if ((check = get_line(str, line, fd) == -1))
+		return (-1);
+	else if (check == 0)
+		return (0);
+	return ((str[fd]) ? 1 : 0);
 }
 
 int		main(int ac, char **av)
@@ -42,7 +71,11 @@ int		main(int ac, char **av)
 
 	(void)ac;
 	str = 0;
-	printf("read ? %d\n", get_next_line(open(av[1], O_RDONLY), &str));
+	int		fd = open(av[1], O_RDONLY);
+	printf("read ? %d\n", get_next_line(fd, &str));
+	printf("%s\n", str);
+	printf("ok\n");
+	printf("read ? %d\n", get_next_line(fd, &str));
 	printf("%s", str);
 	return (0);
 }

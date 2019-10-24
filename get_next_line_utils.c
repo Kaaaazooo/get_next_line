@@ -6,7 +6,7 @@
 /*   By: sabrugie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/23 14:32:33 by sabrugie          #+#    #+#             */
-/*   Updated: 2019/10/23 19:24:28 by sabrugie         ###   ########.fr       */
+/*   Updated: 2019/10/24 12:05:39 by sabrugie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ char	*ft_strchr(const char *s, int c)
 {
 	char			*str;
 
+	if (s == 0)
+		return (0);
 	str = (char *)s;
 	while (*str)
 	{

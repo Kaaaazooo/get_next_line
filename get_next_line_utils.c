@@ -6,7 +6,7 @@
 /*   By: sabrugie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/23 14:32:33 by sabrugie          #+#    #+#             */
-/*   Updated: 2019/10/24 12:05:39 by sabrugie         ###   ########.fr       */
+/*   Updated: 2019/10/24 14:27:47 by sabrugie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,10 @@ char	*ft_strtrim(char *s1)
 
 	i = 0;
 	end = 0;
-	if (s1 == 0 || s1[0] == 0 || s1[0] == '\n')
+	if (s1 == 0)
 		return (0);
+	if (s1[0] == 0 || s1[0] == '\n')
+		return ("");
 	while (s1[end] != '\n' && s1[end])
 		end++;
 	if (!(res = malloc(sizeof(*res) * (end + 1))))

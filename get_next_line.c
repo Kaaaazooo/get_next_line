@@ -6,7 +6,7 @@
 /*   By: sabrugie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/23 14:28:55 by sabrugie          #+#    #+#             */
-/*   Updated: 2019/10/24 12:12:10 by sabrugie         ###   ########.fr       */
+/*   Updated: 2019/10/24 14:53:55 by sabrugie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*get_read(char **tmp, int fd)
 	str = 0;
 	if (!tmp[fd])
 		return (0);
-	if (tmp[fd] && tmp[fd][0] != 0 && tmp[fd][0] != '\n')
+	if (tmp[fd] && tmp[fd][0] != 0 && tmp[fd][0])
 	{
 		str = ft_strdup(tmp[fd]);
 		if (ft_strchr(tmp[fd], '\n'))
@@ -37,7 +37,7 @@ char	*get_read(char **tmp, int fd)
 	return (str);
 }
 
-void	find_next(char buf[BUF_SIZE + 1], char **tmp, int fd, int ret)
+void	find_next(char buf[BUFFER_SIZE + 1], char **tmp, int fd, int ret)
 {
 	int				next;
 
@@ -50,7 +50,7 @@ void	find_next(char buf[BUF_SIZE + 1], char **tmp, int fd, int ret)
 
 int		get_next_line(int fd, char **line)
 {
-	char			buf[BUF_SIZE + 1];
+	char			buf[BUFFER_SIZE + 1];
 	static char		*tmp[10240];
 	char			*str;
 	int				ret;
@@ -63,7 +63,7 @@ int		get_next_line(int fd, char **line)
 		*line = ft_strtrim(str);
 		return (1);
 	}
-	while ((ret = read(fd, buf, BUF_SIZE)) > 0)
+	while ((ret = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
 		buf[ret] = 0;
 		if (!(str = ft_strjoin(str, buf)))
@@ -71,7 +71,7 @@ int		get_next_line(int fd, char **line)
 		if (ft_strchr(buf, '\n'))
 			break ;
 	}
-	if (!(*line = ft_strtrim(str)))
+	if (!(*line = ft_strtrim(str)) && ret != 0)
 		return (-1);
 	find_next(buf, tmp, fd, ret);
 	return ((str ? 1 : 0));

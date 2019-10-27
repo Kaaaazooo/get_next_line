@@ -5,74 +5,117 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sabrugie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/23 14:28:55 by sabrugie          #+#    #+#             */
-/*   Updated: 2019/10/24 14:53:55 by sabrugie         ###   ########.fr       */
+/*   Created: 2019/10/25 14:08:53 by sabrugie          #+#    #+#             */
+/*   Updated: 2019/10/27 16:14:29 by sabrugie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
+#include <fcntl.h>
 #include "get_next_line.h"
+#include "get_next_line_utils.c"
 
-char	*get_read(char **tmp, int fd)
+int		get_tmp(char *str, int ret, char *tmp[10240], int fd)
 {
-	int				next;
-	char			*str;
+	int			i;
 
-	next = 0;
-	str = 0;
-	if (!tmp[fd])
-		return (0);
-	if (tmp[fd] && tmp[fd][0] != 0 && tmp[fd][0])
-	{
-		str = ft_strdup(tmp[fd]);
-		if (ft_strchr(tmp[fd], '\n'))
-		{
-			while (tmp[fd][next] != '\n')
-				next++;
-			tmp[fd] = tmp[fd] + next + 1;
-			return (str);
-		}
-	}
+	i = 0;
 	tmp[fd] = 0;
-	free(tmp[fd]);
-	return (str);
+	while (str[i] && str[i] != '\n' && i < ret)
+		i++;
+	if (i + 1 != ret && str[i + 1] && ret)
+		if (!(tmp[fd] = ft_strdup(str + i + 1)))
+			return (0);
+	return (1);
 }
 
-void	find_next(char buf[BUFFER_SIZE + 1], char **tmp, int fd, int ret)
+int		get_read(char *tmp[10240], char **line, char **str, int fd)
 {
-	int				next;
+	int			next;
 
 	next = 0;
-	while (ret && buf[next] != '\n' && buf[next] && next < ret)
-		next++;
-	if (next + 1 != ret && buf[next + 1] && ret)
-		tmp[fd] = ft_strdup(buf + next + 1);
+	if (!tmp[fd])
+		return (0);
+	if (tmp[fd] && tmp[fd][0] != 0)
+	{
+		if (ft_strchr(tmp[fd], '\n'))
+		{
+			while (tmp[fd][next] && tmp[fd][next] != '\n')
+				next++;
+			if (!(*line = ft_strtrim(tmp[fd])))
+				return (-1);
+			tmp[fd] = tmp[fd] + next + 1;
+			return (1);
+		}
+		if (!(*str = ft_strdup(tmp[fd])))
+			return (-1);
+	}
+	tmp[fd] = NULL;
+	free(tmp[fd]);
+	return (0);
+}
+
+int		read_file(int fd, char **line, char *tmp[10240])
+{
+	char		buf[BUFFER_SIZE + 1];
+	int			ret;
+	int			to_ret;
+	char		*str;
+
+	str = 0;
+	*line = 0;
+	free(*line);
+	if ((to_ret = get_read(tmp, line, &str, fd) != 0))
+		return (to_ret);
+	while ((ret = read(fd, buf, BUFFER_SIZE)) > 0)
+	{
+		buf[ret] = 0;
+		str = ft_strjoin(str, buf, ret);
+		if (ft_strchr(buf, '\n'))
+			break ;
+	}
+//	printf("ret = %d ; str :\n%s\nbuf :\n%s\n", ret, str, buf);
+	if (!(*line = ft_strtrim(str)) && ret != 0)
+		return (-1);
+	if (!get_tmp(buf, ret, tmp, fd))
+		return (-1);
+	free(str);
+	return (*line ? 1 : 0);
 }
 
 int		get_next_line(int fd, char **line)
 {
-	char			buf[BUFFER_SIZE + 1];
-	static char		*tmp[10240];
-	char			*str;
-	int				ret;
+	char		*tmp[10240];
+	int			to_ret;
 
-	if (fd < 0 || line == NULL)
-		return (-1);
-	str = get_read(tmp, fd);
-	if (str && ft_strchr(str, '\n'))
+	to_ret = read_file(fd, line, tmp);
+	if (to_ret != 1)
 	{
-		*line = ft_strtrim(str);
-		return (1);
+		*line = 0;
+		free(*line);
+		tmp[fd] = 0;
+		free(tmp[fd]);
 	}
-	while ((ret = read(fd, buf, BUFFER_SIZE)) > 0)
-	{
-		buf[ret] = 0;
-		if (!(str = ft_strjoin(str, buf)))
-			return (-1);
-		if (ft_strchr(buf, '\n'))
-			break ;
-	}
-	if (!(*line = ft_strtrim(str)) && ret != 0)
-		return (-1);
-	find_next(buf, tmp, fd, ret);
-	return ((str ? 1 : 0));
+	return (to_ret);
 }
+/*
+int		main(int ac, char **av)
+{
+	int			fd;
+	char		*str = 0;
+	int			ret;
+	(void)ac;
+	(void)av;
+
+//	while (1)
+//	{
+		fd = open("tests", O_RDONLY);
+		while ((ret = get_next_line(fd, &str) > 0))
+		{
+			printf("%s\n", str);
+		}
+		close(fd);
+	system("leaks a.out");
+//	}
+	return (0);
+}*/

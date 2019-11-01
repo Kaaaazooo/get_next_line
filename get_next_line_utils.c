@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sabrugie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/23 14:32:33 by sabrugie          #+#    #+#             */
-/*   Updated: 2019/10/25 14:44:14 by sabrugie         ###   ########.fr       */
+/*   Created: 2019/11/01 11:23:33 by sabrugie          #+#    #+#             */
+/*   Updated: 2019/11/01 16:03:40 by sabrugie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,89 +31,85 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
-char	*ft_strdup(const char *s1)
+int		has_nl(char *str)
 {
-	size_t			i;
-	char			*s2;
-
-	i = 0;
-	while (s1[i])
-		i++;
-	if (!(s2 = malloc(sizeof(*s2) * (i + 1))))
+	if (!str)
 		return (0);
-	i = 0;
-	while (s1[i])
-	{
-		s2[i] = s1[i];
-		i++;
-	}
-	s2[i] = 0;
-	return (s2);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	char			*str;
-
-	if (s == 0)
-		return (0);
-	str = (char *)s;
 	while (*str)
 	{
-		if (*str == (char)c)
-			return (str);
-		str++;
+		if (*str++ == '\n')
+			return (1);
 	}
-	if (c == 0)
-		return (str);
 	return (0);
 }
 
-char	*ft_strtrim(char *s1)
+char	*ft_cut(char *s1)
 {
-	size_t			end;
-	size_t			i;
-	char			*res;
+	int		end;
+	int		i;
+	char	*res;
 
 	i = 0;
 	end = 0;
 	if (s1 == 0)
 		return (0);
-	if (s1[0] == 0 || s1[0] == '\n')
-		return ("");
-	while (s1[end] != '\n' && s1[end])
+	while (s1[end] && s1[end] != '\n')
 		end++;
 	if (!(res = malloc(sizeof(*res) * (end + 1))))
 		return (0);
-	res[end] = 0;
 	while (i < end)
 	{
 		res[i] = s1[i];
 		i++;
 	}
+	res[i] = 0;
 	return (res);
 }
 
-char	*ft_strjoin(char *s1, const char *s2, size_t len2)
+char	*ft_join(char *s1, char *s2)
 {
-	char			*tmp;
-	size_t			len1;
+	int		len1;
+	int		len2;
+	char	*str;
 
+	if (!s1)
+		return (ft_cut(s2));
 	len1 = 0;
-	if (!s1 && !s2)
+	len2 = 0;
+	while (s1[len1])
+		len1++;
+	while (s2[len2] && s2[len2] != '\n')
+		len2++;
+	if (!(str = malloc(sizeof(char) * (len1 + len2 + 1))))
 		return (0);
-	if (s1)
-	{
-		while (s1[len1])
-			len1++;
-	}
-	if (!(tmp = malloc(sizeof(char) * (len1 + len2 + 1))))
-		return (0);
-	ft_memcpy(tmp, s1, len1);
-	ft_memcpy(tmp + len1, s2, len2);
-	tmp[len1 + len2] = 0;
+	ft_memcpy(str, s1, len1);
+	ft_memcpy(str + len1, s2, len2);
+	str[len1 + len2] = 0;
 	free(s1);
-	s1 = ft_strdup(tmp);
-	free(tmp);
-	return (s1);
+	return (str);
+}
+
+char	*to_next(int fd, char **remain, char *buf, int ret)
+{
+	int		i;
+	int		j;
+	char	*str;
+
+	i = 0;
+	j = 0;
+	while (i <= ret && buf[i] != '\n')
+		i++;
+	i++;
+	if (ret == 0)
+		ret = i;
+	if (!(str = malloc(sizeof(char) * (ret - i + 1))))
+		return (0);
+	while (i + j < ret)
+	{
+		str[j] = buf[i + j];
+		j++;
+	}
+	str[j] = 0;
+	free(remain[fd]);
+	return (str);
 }

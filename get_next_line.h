@@ -6,7 +6,7 @@
 /*   By: sabrugie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:19:14 by sabrugie          #+#    #+#             */
-/*   Updated: 2019/11/02 16:58:57 by sabrugie         ###   ########.fr       */
+/*   Updated: 2019/11/03 14:17:46 by sabrugie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <stdio.h>
 
 # ifndef BUFFER_SIZE
-# define BUFFER_SIZE 32
+#  define BUFFER_SIZE 999
 # endif
 
 int			get_next_line(int fd, char **line);

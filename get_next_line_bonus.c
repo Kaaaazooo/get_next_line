@@ -6,7 +6,7 @@
 /*   By: sabrugie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:18:42 by sabrugie          #+#    #+#             */
-/*   Updated: 2019/11/07 16:11:29 by sabrugie         ###   ########.fr       */
+/*   Updated: 2019/11/09 14:15:21 by sabrugie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int		get_next_line(int fd, char **line)
 				break ;
 		}
 		if (!(remain[fd] = to_next(fd, remain, buf, ret)))
-			return (-1);
+			return (end_reached(-1, fd, line, remain));
 		to_ret = ((!ret) ? 0 : 1);
 	}
 	end_reached(to_ret, fd, line, remain);

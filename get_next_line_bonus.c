@@ -6,7 +6,7 @@
 /*   By: sabrugie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:18:42 by sabrugie          #+#    #+#             */
-/*   Updated: 2019/11/09 14:15:21 by sabrugie         ###   ########.fr       */
+/*   Updated: 2019/11/10 11:24:41 by sabrugie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		get_read(int fd, char **remain, char **line)
 	int		i;
 	int		nl;
 
-	if (fd < 0 || fd > FOPEN_MAX || !line || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > OPEN_MAX || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	*line = 0;
 	if (!remain[fd] || !remain)
@@ -51,7 +51,7 @@ int		get_next_line(int fd, char **line)
 	int			ret;
 	int			to_ret;
 	char		*buf;
-	static char	*remain[FOPEN_MAX];
+	static char	*remain[OPEN_MAX];
 
 	if (!(buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
 		return (end_reached(-1, fd, line, remain));

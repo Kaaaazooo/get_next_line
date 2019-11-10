@@ -6,7 +6,7 @@
 /*   By: sabrugie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:18:42 by sabrugie          #+#    #+#             */
-/*   Updated: 2019/11/10 11:24:41 by sabrugie         ###   ########.fr       */
+/*   Updated: 2019/11/10 12:06:49 by sabrugie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@ int		get_read(int fd, char **remain, char **line)
 
 	if (fd < 0 || fd > OPEN_MAX || !line || BUFFER_SIZE <= 0)
 		return (-1);
-	*line = 0;
+	if (!(*line = ft_cut("")))
+		return (-1);
 	if (!remain[fd] || !remain)
 		return (0);
 	i = 0;
+	free(*line);
 	if (!(*line = ft_cut(remain[fd])))
 		return (-1);
 	while (remain[fd][i])

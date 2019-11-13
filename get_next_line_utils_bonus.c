@@ -6,11 +6,11 @@
 /*   By: sabrugie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:23:33 by sabrugie          #+#    #+#             */
-/*   Updated: 2019/11/03 11:01:11 by sabrugie         ###   ########.fr       */
+/*   Updated: 2019/11/13 15:41:13 by sabrugie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
 {

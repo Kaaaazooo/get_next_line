@@ -6,11 +6,11 @@
 /*   By: sabrugie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:18:42 by sabrugie          #+#    #+#             */
-/*   Updated: 2019/11/15 11:14:55 by sabrugie         ###   ########.fr       */
+/*   Updated: 2019/11/15 12:18:24 by sabrugie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int		end_reached(int fd, int ret, char **buf, char **remain)
 {

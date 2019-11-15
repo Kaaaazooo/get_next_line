@@ -6,7 +6,7 @@
 /*   By: sabrugie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:18:42 by sabrugie          #+#    #+#             */
-/*   Updated: 2019/11/13 15:40:23 by sabrugie         ###   ########.fr       */
+/*   Updated: 2019/11/15 11:14:55 by sabrugie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ int		end_reached(int fd, int ret, char **buf, char **remain)
 	if (ret != 1)
 	{
 		if (fd >= 0 && fd <= OPEN_MAX)
+		{
 			free(*remain);
-		*remain = NULL;
+			*remain = NULL;
+		}
 	}
 	if (buf)
 	{
